@@ -16,12 +16,14 @@
 <script>
 	// Complete this section and create a CSS file named style.css
 	var video = document.getElementsById("classic_video");
-	var movie_quotes = document.getElementById(movie_quotes);
+	var movie_quotes = document.getElementById("movie_quotes");
 
-	video.addEventListener("timeupdate", function()){
-		console.log(video.currentTime);
+	video.ontimeupdate = function(){addCaption()};
 
-		if (video.currentTime < ){
+	function addCaption(){
+		//Determines the time and adds the proper caption
+
+		if (video.currentTime < 30 ){
 			movie_quotes.innerHTML = "<h2> Igor: DR. FRANKENSTEIN?!?!?</h2>";
 		}
 		else if (video.currentTime >) && (video.currentTime <){
@@ -80,7 +82,6 @@
 		}
 	}
 
-	//console.log(v);
 </script>
 </body>
 </html>	
