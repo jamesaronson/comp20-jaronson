@@ -1,1 +1,28 @@
-/* style sheet */
+body {
+background-color: black;
+}
+
+#title {
+	text-align: center;
+	color:white;
+}
+
+#classic_video{
+	display: block;
+	margin: auto;
+	height:75%;
+	width:75%;
+	border-style: solid;
+	border-color: white;
+
+}
+
+#movie_quotes {
+	display: block;
+	margin: auto;
+	width: 75%;
+	text-align: center;
+	color: white;
+	font-size:1.25em;
+
+}
