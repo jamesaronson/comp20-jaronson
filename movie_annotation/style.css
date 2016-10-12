@@ -11,7 +11,7 @@ background-color: black;
 	display: block;
 	margin: auto;
 	height:75%;
-	width:75%;
+	width:50%;
 	border-style: solid;
 	border-color: white;
 
@@ -20,7 +20,7 @@ background-color: black;
 #movie_quotes {
 	display: block;
 	margin: auto;
-	width: 75%;
+	width: 50%;
 	text-align: center;
 	color: white;
 	font-size:1.25em;
