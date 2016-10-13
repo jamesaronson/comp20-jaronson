@@ -14,7 +14,7 @@
 <div id="movie_quotes"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
+
 	var video = document.getElementsById("classic_video");
 	var movie_quotes = document.getElementById("movie_quotes");
 
@@ -23,62 +23,65 @@
 	function addCaption(){
 		//Determines the time and adds the proper caption
 
-		if (video.currentTime < 30 ){
+		if (video.currentTime > 24.2 ) && (video.currentTime < 26.0{
 			movie_quotes.innerHTML = "<h2> Igor: DR. FRANKENSTEIN?!?!?</h2>";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 31.2 ) && (video.currentTime < 32.8){
 			movie_quotes.innerHTML = "<h2> Dr. Frederick Frankenstein: Frokensteen.";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 33.2) && (video.currentTime < 36.2){
 			movie_quotes.innerHTML = "<h2> Igor: You're putting me on.";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 36.4) && (video.currentTime < 39.0){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: No, it pronounced, "Frokensteen".';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 39.5) && (video.currentTime < 41.7){
 			movie_quotes.innerHTML = "<h2> Igor: Do you also say Froaderick?";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 42.0) && (video.currentTime < 44.0){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: No..."Frederick."';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 44.1) && (video.currentTime < 47.1){
 			movie_quotes.innerHTML = "<h2> Igor: Well, why isn't it, 'Froaderick Frokensteen'?";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 47.2) && (video.currentTime < 49.4){
 			movie_quotes.innerHTML = "<h2> Dr. Frederick Frankenstein: It isn't, it's \" Frederick Frokensteen\"";
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 50.1) && (video.currentTime < 51.7){
 			movie_quotes.innerHTML = '<h2> Igor: I see.';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 52.2) && (video.currentTime < 53.4){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: You must be Igor. [He prounounces it ee-gor.]';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 53.5) && (video.currentTime < 55.8){
 			movie_quotes.innerHTML = '<h2> Igor: No, it\'s prounounced "eye-gor."';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 56.6) && (video.currentTime < 58.5){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: But they told me it was "ee-gor"...';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 58.6) && (video.currentTime < 60.2){
 			movie_quotes.innerHTML = '<h2> Igor: Well, they were wrong then, weren\'t they?';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 60.8) && (video.currentTime < 64.3){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: Uh, you were sent here by Herr Fralkstein, weren\'t you?';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 64.4) && (video.currentTime < 68.5){
 			movie_quotes.innerHTML = '<h2> Igor: Yes. My grandfather used to work for your grandfather.';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 71.0) && (video.currentTime < 71.9){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: How nice';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 72.0) && (video.currentTime < 74.2){
 			movie_quotes.innerHTML = '<h2> Igor: Of course the rates have gone up.';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 74.3) && (video.currentTime < 88.6){
 			movie_quotes.innerHTML = '<h2> Dr. Frederick Frankenstein: Of course, of course, I\'m sure we\'ll get along splendidly. Oh, I uh, you know I don\'t mean to embarass you, but I\'m rather a brilliant surgeon. Perhaps I can help you with that hump.';
 		}
-		else if (video.currentTime >) && (video.currentTime <){
+		else if (video.currentTime > 89.0) && (video.currentTime < 90.5){
 			movie_quotes.innerHTML = '<h2> Igor: What hump?';
+		}
+		else {
+			movie_quotes.innerHTML = '';
 		}
 	}
 
