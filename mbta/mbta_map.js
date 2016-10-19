@@ -8,54 +8,8 @@ var myOptions = {
 	};
 var map;
 var marker;
-
-
-function init() {
-
-	map = new google.maps.Map(document.getElementById("map"), myOptions)
-	//myLocation();
-	addStations();
-	myMarker(myCoord, "me"); //checked to see if newMarker was working
-	//findClosest();
-};
-
-function myMarker(location, name){
-
-	var infowindow = new google.maps.InfoWindow();
-
-	myCoord= new google.maps.LatLng(myLat, myLng);
-	map.panTo(myCoord);
-
-	marker = new google.maps.Marker({
-
-		position: location,
-		title: name,
-		map: map
-		//icon: symbol
-	});
-
-	google.maps.event.addListener(marker, 'click', function(){
-		infowindow.setContent(marker.title); //will be switched to the train data etc...
-		infowindow.open(map, marker);
-	});
-};
-
-/*function myLocation(){	
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position){
-			myLat = position.coords.latitude;
-			myLng = position.coords.longitude;
-			myMarker({lat: myLat, lng: myLng},"My Location"); //not sure if this will work
-		});
-	}
-	else {
-		alert("Your browser does not support navigator.geolocation")
-	}
-};*/
-
-function addStations(){
-
-	var station_names = [
+var previous_window = false;
+var station_names = [
 		"Alewife",
 		"Davis",
 		"Porter Square",
@@ -79,13 +33,7 @@ function addStations(){
 		"Quincy Adams",
 		"Braintree"
 		];
-
-		var station_icon= {
-			url: "station.png",
-			scaledSize: new google.maps.Size(30,30)
-		};
-
-	var locations = [
+var locations = [
 		{lat: 42.395428, lng: -71.142483},
 		{lat: 42.39674, lng: -71.121815},
 		{lat: 42.3884, lng: -71.11914899999999},
@@ -110,21 +58,103 @@ function addStations(){
 		{lat: 42.2078543, lng: -71.0011385}
 		];
 
-	marker = locations.map(function(location, i) {
+function init() {
+
+	map = new google.maps.Map(document.getElementById("map"), myOptions)
+	//myLocation();
+	addStations();
+	myMarker(myCoord, "me"); //checked to see if newMarker was working
+	//findClosest();
+};
+
+function myMarker(location, name){
+
+	var closest;
+	var infowindow = new google.maps.InfoWindow();
+
+	myCoord= new google.maps.LatLng(myLat, myLng);
+	map.panTo(myCoord);
+
+	marker = new google.maps.Marker({
+
+		position: location,
+		title: name,
+		map: map
+	});
+
+	closest = findClosest();
+
+	google.maps.event.addListener(marker, 'click', function(){
+		infowindow.setContent("Closest Station: " + closest); 
+		infowindow.open(map, marker);
+	});
+};
+
+/*function myLocation(){	
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			myLat = position.coords.latitude;
+			myLng = position.coords.longitude;
+			myMarker(myCoord, "My Location");
+			//myMarker({lat: myLat, lng: myLng},"My Location"); //not sure if this will work
+		});
+	}
+	else {
+		alert("Your browser does not support navigator.geolocation")
+	}
+};*/
+
+function addStations(){
+
+	
+
+		var station_icon= {
+			url: "station.png",
+			scaledSize: new google.maps.Size(30,30)
+		};
+
+	
+
+
+	var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: locations[i],
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(station_names[i]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+     } ;
+
+	//puts down a station marker for each station	
+	/*marker = locations.map(function(location, i) {
+
+		var infowindow = new google.maps.InfoWindow();
+
 		return new google.maps.Marker({
 			position: location,
 			title: station_names[i % station_names.length],
-			//infowindow: info[i % info.length],
+			infowindow: station_names[i % station_names.length],
 			icon: station_icon,
 			map: map
 		});
-	});		
-	
+	});	*/	
+
+	//draws the polylines connecting the stations	
 	var patha = [];
 
 	for (i=0; station_names[i]!= "North Quincy"; i++){
  		patha[i] = locations[i];
 	};
+
 	drawPolyline(patha,"#FF0000");
 
 	var pathb = [];
@@ -135,13 +165,14 @@ function addStations(){
 		i++;
 		pathb[i] = locations[i+16];
 	} while (station_names[i+16] != "Braintree");
-	drawPolyline(pathb,"#FF0000");
 
-	findClosest(locations);
+	drawPolyline(pathb,"#FF0000");
 };
 
-function findClosest(locations){
+function findClosest(){
+//determines which point is closest
 	var p1 = locations[0];
+	var name = station_names[0];
 
 	var dist = haversine(p1);
 
@@ -149,13 +180,16 @@ function findClosest(locations){
 		if (haversine(locations[i])< dist){
 			p1 = locations[i];
 			dist = haversine(p1);
+			name = station_names[i];
 		};
 	};
-
 	drawPolyline([p1, myCoord],"#230CF2");
+
+	return name;
 };
 
 function drawPolyline(points,color){
+//draws polyline between specified points and of the specified color
 
 	var red_line = new google.maps.Polyline({
 		path: points,
@@ -174,10 +208,8 @@ function toRad(x) {
    return x * Math.PI / 180;
 };
 
-var testvar;
-
 function haversine(p){
-
+// finds the distance between two Lat,Lng points
 	var lat2 = p.lat; 
 	var lon2 = p.lng; 
 	var lat1 = myCoord.lat(); 
