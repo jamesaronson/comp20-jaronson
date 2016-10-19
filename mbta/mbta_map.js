@@ -14,16 +14,15 @@ function init() {
 
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
 	//myLocation();
-	//newMarker(myCoord, "me"); //checked to see if newMarker was working
+	newMarker(myCoord, "me"); //checked to see if newMarker was working
 };
 
 function newMarker(location, name){
 
-//	var infowindow = new google.maps.InfoWindow();
+	var infowindow = new google.maps.InfoWindow();
+
 	myCoord= new google.maps.LatLng(myLat, myLng);
 	map.panTo(myCoord);
-
-	console.log(myCoord);
 
 	marker = new google.maps.Marker({
 		position: location,
