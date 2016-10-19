@@ -1,1 +1,14 @@
-/* style 
+html {
+	height: 100%;
+}
+
+body {
+	height:100%;
+	margin: 0pt;
+	padding: 0pt;
+}
+
+#map {
+	height:100%;
+	width: 100%;
+}

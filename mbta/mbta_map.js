@@ -1,11 +1,12 @@
 function init() {
 
-	var map = new google.maps.Map(document.getElementById("mbta_map"), {
+	var map = new google.maps.Map(document.getElementById("map"), {
 		zoom: 12,
-		center: me
+		center: {lat: 42.33. lng: -71.1}
 	});
-
-	var labels = [
+};
+/*
+	var station_names = [
 		"South Station",
 		"Andrew",
 		"Porter Square",
@@ -30,10 +31,14 @@ function init() {
 		"Braintree"
 		]
 
-		var station_markers = locations.map(function(locations, i) {
+		var station_icon ="station.jpg"
+
+		var station_markers = locations.map(function(location, i) {
 			return new google.maps.Marker({
-				position: locations,
-				label: labels[i % labels.length]
+				position: location,
+				title: station_names[i % station_names.length],
+				icon: station_icon,
+				map: map
 			});
 		});
 
@@ -60,5 +65,5 @@ function init() {
 		{lat: 42.300093, lng: -71.061667},
 		{lat: 42.365486, lng: -71.103802},
 		{lat: 42.2078543, lng: -71.0011385}
-		];
-}
+		]; */
+//};
