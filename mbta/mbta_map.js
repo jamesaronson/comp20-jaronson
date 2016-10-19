@@ -1,5 +1,5 @@
-var myLat = 0;
-var myLng = 1;
+var myLat = 42.33;
+var myLng = -71.1;
 var request = new XMLHttpRequest();
 var myCoord= new google.maps.LatLng(myLat, myLng);
 var myOptions = {
@@ -14,6 +14,7 @@ function init() {
 
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
 	//myLocation();
+	addStations();
 	newMarker(myCoord, "me"); //checked to see if newMarker was working
 };
 
@@ -25,12 +26,12 @@ function newMarker(location, name){
 	map.panTo(myCoord);
 
 	marker = new google.maps.Marker({
+
 		position: location,
-		title: name
+		title: name,
+		map: map
 		//icon: symbol
 	});
-
-	marker.setMap(map);
 
 	google.maps.event.addListener(marker, 'click', function(){
 		infowindow.setContent(marker.title); //will be switched to the train data etc...
@@ -55,7 +56,8 @@ function newMarker(location, name){
 
 };*/
 
-/*
+function addStations(){
+
 	var station_names = [
 		"South Station",
 		"Andrew",
@@ -79,20 +81,14 @@ function newMarker(location, name){
 		"Fields Corner",
 		"Central Square",
 		"Braintree"
-		]
+		];
 
-		var station_icon ="station.jpg"
+		var station_icon= {
+			url: "station.png",
+			scaledSize: new google.maps.Size(30,30)
+		};
 
-		var station_markers = locations.map(function(location, i) {
-			return new google.maps.Marker({
-				position: location,
-				title: station_names[i % station_names.length],
-				icon: station_icon,
-				map: map
-			});
-		});
-
-		var locations = [
+	var locations = [
 		{lat: 42.352271, lng: -71.05524200000001},
 		{lat: 42.330154, lng: -71.057655},
 		{lat: 42.3884, lng: -71.11914899999999},
@@ -115,5 +111,23 @@ function newMarker(location, name){
 		{lat: 42.300093, lng: -71.061667},
 		{lat: 42.365486, lng: -71.103802},
 		{lat: 42.2078543, lng: -71.0011385}
-		]; */
+		];
+
+	marker = locations.map(function(location, i) {
+		return new google.maps.Marker({
+			position: location,
+			title: station_names[i % station_names.length],
+			icon: station_icon,
+			map: map
+		});
+	});		
+
+	/*for (var i=0; i < station_names.length; i++){
+
+		var pos = location[i];
+		var name = station_names[i];
+
+		newMarker(pos, name);
+	};*/
+};
 //};
