@@ -13,8 +13,8 @@ var marker;
 function init() {
 
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
-	myLocation();
-	console.log("check");
+	//myLocation();
+	//newMarker(myCoord, "me"); //checked to see if newMarker was working
 };
 
 function newMarker(location, name){
@@ -33,19 +33,18 @@ function newMarker(location, name){
 
 	marker.setMap(map);
 
-	//google.maps.event.addListener(marker, 'click', function(){
-	//	infowindow.setContent(marker.label); //will be switched to the train data etc...
-	//	infowindow.open(map, marker);
-	//});
+	google.maps.event.addListener(marker, 'click', function(){
+		infowindow.setContent(marker.title); //will be switched to the train data etc...
+		infowindow.open(map, marker);
+	});
 };
 
-function myLocation(){	
+/*function myLocation(){	
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			myLat = position.coords.latitude;
 			myLng = position.coords.longitude;
-			console.log(myLat);
 			newMarker({lat: myLat, lng: myLng},"My Location"); //not sure if this will work
 
 		});
@@ -55,7 +54,7 @@ function myLocation(){
 		alert("Your browser does not support navigator.geolocation")
 	}
 
-};
+};*/
 
 /*
 	var station_names = [
