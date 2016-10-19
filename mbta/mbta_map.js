@@ -1,10 +1,62 @@
+var myLat = 0;
+var myLng = 1;
+var request = new XMLHttpRequest();
+var myCoord= new google.maps.LatLng(myLat, myLng);
+var myOptions = {
+		zoom:13,
+		center: myCoord
+	};
+var map;
+var marker;
+
+
 function init() {
 
-	var map = new google.maps.Map(document.getElementById("map"), {
-		zoom: 12,
-		center: {lat: 42.33. lng: -71.1}
-	});
+	map = new google.maps.Map(document.getElementById("map"), myOptions)
+	myLocation();
+	console.log("check");
 };
+
+function newMarker(location, name){
+
+//	var infowindow = new google.maps.InfoWindow();
+	myCoord= new google.maps.LatLng(myLat, myLng);
+	map.panTo(myCoord);
+
+	console.log(myCoord);
+
+	marker = new google.maps.Marker({
+		position: location,
+		title: name
+		//icon: symbol
+	});
+
+	marker.setMap(map);
+
+	//google.maps.event.addListener(marker, 'click', function(){
+	//	infowindow.setContent(marker.label); //will be switched to the train data etc...
+	//	infowindow.open(map, marker);
+	//});
+};
+
+function myLocation(){	
+
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			myLat = position.coords.latitude;
+			myLng = position.coords.longitude;
+			console.log(myLat);
+			newMarker({lat: myLat, lng: myLng},"My Location"); //not sure if this will work
+
+		});
+	}
+
+	else {
+		alert("Your browser does not support navigator.geolocation")
+	}
+
+};
+
 /*
 	var station_names = [
 		"South Station",
