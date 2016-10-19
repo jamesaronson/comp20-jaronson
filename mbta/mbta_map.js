@@ -3,12 +3,11 @@ var myLng = -71.1;
 var request = new XMLHttpRequest();
 var myCoord= new google.maps.LatLng(myLat, myLng);
 var myOptions = {
-		zoom:9,
+		zoom:12,
 		center: myCoord
 	};
 var map;
 var marker;
-var previous_window = false;
 var station_names = [
 		"Alewife",
 		"Davis",
@@ -63,8 +62,7 @@ function init() {
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
 	//myLocation();
 	addStations();
-	myMarker(myCoord, "me"); //checked to see if newMarker was working
-	//findClosest();
+	myMarker(myCoord, "me"); 
 };
 
 function myMarker(location, name){
@@ -85,7 +83,7 @@ function myMarker(location, name){
 	closest = findClosest();
 
 	google.maps.event.addListener(marker, 'click', function(){
-		infowindow.setContent("Closest Station: " + closest); 
+		infowindow.setContent("Closest Station: " + closest[0] + ", Distance: " + closest[1] +" miles"); 
 		infowindow.open(map, marker);
 	});
 };
@@ -105,21 +103,16 @@ function myMarker(location, name){
 };*/
 
 function addStations(){
+// Adds stations and draws polylines connecting them	
 
-	
-
-		var station_icon= {
+	var station_icon= {
 			url: "station.png",
 			scaledSize: new google.maps.Size(30,30)
 		};
-
-	
-
-
 	var infowindow = new google.maps.InfoWindow();
-
     var marker, i;
 
+    //adds stations and infowindows
     for (i = 0; i < locations.length; i++) {  
       marker = new google.maps.Marker({
         position: locations[i],
@@ -185,7 +178,9 @@ function findClosest(){
 	};
 	drawPolyline([p1, myCoord],"#230CF2");
 
-	return name;
+	dist= Math.trunc(dist*100)/100;
+
+	return [name,dist];
 };
 
 function drawPolyline(points,color){
@@ -224,7 +219,8 @@ function haversine(p){
                 Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
                 Math.sin(dLon/2) * Math.sin(dLon/2);  
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-	var d = R * c; 
+	var d = R * c * 0.621371; //converts distance to miles
+
 	return d;
 
 
