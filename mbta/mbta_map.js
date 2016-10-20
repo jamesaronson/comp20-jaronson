@@ -83,7 +83,7 @@ function myMarker(location, name){
 	closest = findClosest();
 
 	google.maps.event.addListener(marker, 'click', function(){
-		infowindow.setContent("Closest Station: " + closest[0] + ", Distance: " + closest[1] +" miles"); 
+		infowindow.setContent("Closest Station: " + closest[0] + "Distance: " + closest[1] +" miles"); 
 		infowindow.open(map, marker);
 	});
 };
@@ -220,14 +220,13 @@ function requestSchedule() {
 
 	request = new XMLHttpRequest();
 	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
-	request.onreadystatechange = getSchedule();
+	request.onreadystatechange = getSchedule;
 	request.send();
 };
 
 function getSchedule() {
 	console.log("The data is => " + request.responseText);
 	console.log(request.readyState, request.status);
-	var content;
 
 	if (request.readyState == 4 && request.status == 200) {
 
@@ -242,9 +241,9 @@ function getSchedule() {
 		}
 		section.innerHTML = newHTML;
 	}
-	if (request.status!= 200){
+	if (request.stats != 200){
 
-		content = "There was an error loading the schedule. Please close and click the marker again";
+		console.log("There was an error loading the schedule. Please close and click the marker again");
 
 	};
 };
