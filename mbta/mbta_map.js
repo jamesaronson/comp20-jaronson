@@ -60,9 +60,9 @@ var locations = [
 function init() {
 
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
-	//myLocation();
+	myLocation();
 	addStations();
-	myMarker(myCoord, "me"); 
+	//myMarker(myCoord, "me"); 
 };
 
 function myMarker(location, name){
@@ -88,19 +88,20 @@ function myMarker(location, name){
 	});
 };
 
-/*function myLocation(){	
+function myLocation(){	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			myLat = position.coords.latitude;
-			myLng = position.coords.longitude;
-			myMarker(myCoord, "My Location");
-			//myMarker({lat: myLat, lng: myLng},"My Location"); //not sure if this will work
+ 			myLng = position.coords.longitude;
+ 			console.log(myLat,myLng);
+ 			myMarker(myCoord, "My Location");
+			//myMarker({lat: myLat, lng: myLng},"My Location");
 		});
 	}
 	else {
 		alert("Your browser does not support navigator.geolocation")
 	}
-};*/
+};
 
 function addStations(){
 // Adds stations and draws polylines connecting them	
@@ -112,34 +113,25 @@ function addStations(){
 	var infowindow = new google.maps.InfoWindow();
     var marker, i;
 
-    //adds stations and infowindows
+    //adds stations 
     for (i = 0; i < locations.length; i++) {  
       marker = new google.maps.Marker({
         position: locations[i],
+        title: station_names[i],
+        icon: station_icon,
         map: map
-      });
+    });
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(station_names[i]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-     } ;
 
-	//puts down a station marker for each station	
-	/*marker = locations.map(function(location, i) {
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+       return function() {
 
-		var infowindow = new google.maps.InfoWindow();
-
-		return new google.maps.Marker({
-			position: location,
-			title: station_names[i % station_names.length],
-			infowindow: station_names[i % station_names.length],
-			icon: station_icon,
-			map: map
-		});
-	});	*/	
+       	 requestSchedule();	
+         infowindow.setContent(marker.title);
+         infowindow.open(map, marker);
+       }
+     })(marker, i));
+    };
 
 	//draws the polylines connecting the stations	
 	var patha = [];
@@ -222,10 +214,39 @@ function haversine(p){
 	var d = R * c * 0.621371; //converts distance to miles
 
 	return d;
-
-
 };
 
+function requestSchedule() {
 
+	request = new XMLHttpRequest();
+	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
+	request.onreadystatechange = getSchedule();
+	request.send();
+};
+
+function getSchedule() {
+	console.log("The data is => " + request.responseText);
+	console.log(request.readyState, request.status);
+	var content;
+
+	if (request.readyState == 4 && request.status == 200) {
+
+		var theData = request.responseText;
+
+		var info = JSON.parse(theData);
+
+		newHTML = "";
+		section = document.getElementById("messages");
+		for (count = 0; count < info.length; count++) {
+			newHTML += "<p>" + messages[count]["username"] + " said " + messages[count]["content"] + "</p>";
+		}
+		section.innerHTML = newHTML;
+	}
+	if (request.status!= 200){
+
+		content = "There was an error loading the schedule. Please close and click the marker again";
+
+	};
+};
 
 //};
