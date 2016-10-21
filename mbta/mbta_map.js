@@ -131,7 +131,7 @@ function addStations(){
     	google.maps.event.addListener(marker, 'click', (function(marker, i) {       
        		return function() {
        			requestSchedule();
-       			this.content = info;
+       			this.content = marker.title + '<br>' + info;
 
         		infowindow.setContent(this.content);
         		infowindow.open(map, this);
