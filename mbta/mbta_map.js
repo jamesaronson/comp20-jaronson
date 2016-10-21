@@ -1,5 +1,5 @@
-var myLat = 42.33;
-var myLng = -71.1;
+var myLat = 0;
+var myLng = 0;
 var request = new XMLHttpRequest();
 var myCoord= new google.maps.LatLng(myLat, myLng);
 var myOptions = {
@@ -8,6 +8,9 @@ var myOptions = {
 	};
 var map;
 var marker;
+var info;
+var errorMSG;
+var stat_code;
 var station_names = [
 		"Alewife",
 		"Davis",
@@ -62,10 +65,10 @@ function init() {
 	map = new google.maps.Map(document.getElementById("map"), myOptions)
 	myLocation();
 	addStations();
-	//myMarker(myCoord, "me"); 
-};
+}
 
 function myMarker(location, name){
+//Places a marker at user location and finds the closest station	
 
 	var closest;
 	var infowindow = new google.maps.InfoWindow();
@@ -74,7 +77,6 @@ function myMarker(location, name){
 	map.panTo(myCoord);
 
 	marker = new google.maps.Marker({
-
 		position: location,
 		title: name,
 		map: map
@@ -83,25 +85,27 @@ function myMarker(location, name){
 	closest = findClosest();
 
 	google.maps.event.addListener(marker, 'click', function(){
-		infowindow.setContent("Closest Station: " + closest[0] + "Distance: " + closest[1] +" miles"); 
+
+		var string = '<div class = "title">' + marker.title + '</div>' + '<p><b>Closest Station: </b> '+ closest[0] + '</p>' + '<p><b>Distance: </b>' + closest[1] + ' miles</p>'; 
+		infowindow.setContent(string); 
 		infowindow.open(map, marker);
 	});
-};
+}
 
 function myLocation(){	
+//find the user location-- adopted from the provided Geolocation sample	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			myLat = position.coords.latitude;
  			myLng = position.coords.longitude;
- 			console.log(myLat,myLng);
- 			myMarker(myCoord, "My Location");
-			//myMarker({lat: myLat, lng: myLng},"My Location");
+ 			myCoord= new google.maps.LatLng(myLat, myLng);
+ 			myMarker(myCoord, "Current Location");
 		});
 	}
 	else {
-		alert("Your browser does not support navigator.geolocation")
+		alert("Your browser does not support Geolocation")
 	}
-};
+}
 
 function addStations(){
 // Adds stations and draws polylines connecting them	
@@ -111,34 +115,36 @@ function addStations(){
 			scaledSize: new google.maps.Size(30,30)
 		};
 	var infowindow = new google.maps.InfoWindow();
+	var contents;
     var marker, i;
 
     //adds stations 
     for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: locations[i],
-        title: station_names[i],
-        icon: station_icon,
-        map: map
-    });
+    	marker = new google.maps.Marker({
+        	position: locations[i],
+        	title: station_names[i],
+        	icon: station_icon,
+        	content: info,
+        	map: map
+    	});
 
+    	google.maps.event.addListener(marker, 'click', (function(marker, i) {       
+       		return function() {
+       			requestSchedule();
+       			this.content = info;
 
-    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-       return function() {
-
-       	 requestSchedule();	
-         infowindow.setContent(marker.title);
-         infowindow.open(map, marker);
-       }
-     })(marker, i));
-    };
+        		infowindow.setContent(this.content);
+        		infowindow.open(map, this);
+       		}
+     	})(marker, i));
+    }
 
 	//draws the polylines connecting the stations	
 	var patha = [];
 
 	for (i=0; station_names[i]!= "North Quincy"; i++){
  		patha[i] = locations[i];
-	};
+	}
 
 	drawPolyline(patha,"#FF0000");
 
@@ -152,7 +158,7 @@ function addStations(){
 	} while (station_names[i+16] != "Braintree");
 
 	drawPolyline(pathb,"#FF0000");
-};
+}
 
 function findClosest(){
 //determines which point is closest
@@ -166,14 +172,15 @@ function findClosest(){
 			p1 = locations[i];
 			dist = haversine(p1);
 			name = station_names[i];
-		};
-	};
+		}
+	}
+
 	drawPolyline([p1, myCoord],"#230CF2");
 
 	dist= Math.trunc(dist*100)/100;
 
 	return [name,dist];
-};
+}
 
 function drawPolyline(points,color){
 //draws polyline between specified points and of the specified color
@@ -188,12 +195,12 @@ function drawPolyline(points,color){
 
 	red_line.setMap(map);
 
-};
+}
 
 // toRad() and haversine() were adopted from the stackoverflow solution provided
 function toRad(x) {
    return x * Math.PI / 180;
-};
+}
 
 function haversine(p){
 // finds the distance between two Lat,Lng points
@@ -214,38 +221,34 @@ function haversine(p){
 	var d = R * c * 0.621371; //converts distance to miles
 
 	return d;
-};
+}
 
 function requestSchedule() {
+//get JSON
 
 	request = new XMLHttpRequest();
 	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
 	request.onreadystatechange = getSchedule;
 	request.send();
-};
+
+}
 
 function getSchedule() {
-	console.log("The data is => " + request.responseText);
-	console.log(request.readyState, request.status);
-
+//Parse JSON
 	if (request.readyState == 4 && request.status == 200) {
 
 		var theData = request.responseText;
-
-		var info = JSON.parse(theData);
-
-		newHTML = "";
-		section = document.getElementById("messages");
-		for (count = 0; count < info.length; count++) {
-			newHTML += "<p>" + messages[count]["username"] + " said " + messages[count]["content"] + "</p>";
-		}
-		section.innerHTML = newHTML;
+		var container = JSON.parse(theData);
+		stat_code = request.status;
+		// I did not finish this. I would have set the global variable info = JSON.parse(theData). Then, in addStation() during the event that created the infowindow, I would call a function that either returns the errorMSG or searches through the JSON for the marker title and sets the content of the infowindow equal to a string concatination of the train destinations, and arrival times for that station.  
+		info = "Sorry, the T is closed"
 	}
-	if (request.stats != 200){
 
-		console.log("There was an error loading the schedule. Please close and click the marker again");
+	if (request.status != 200){
 
-	};
-};
+		info = "Problem loading schedule" + '<br>' + "Please reclick the marker";
+		//would have my errorMSG = "Problem loading schedule" + '<br>' + "Please reclick the marker";
+		stat_code = request.status;
 
-//};
+	}
+}

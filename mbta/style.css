@@ -12,3 +12,12 @@ body {
 	height:100%;
 	width: 100%;
 }
+
+.title {
+	font-weight: bold;
+	font-size: 1.17em;
+}
+
+p {
+	margin-bottom: 0.5em;
+}
