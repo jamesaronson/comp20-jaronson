@@ -227,7 +227,7 @@ function requestSchedule() {
 //get JSON
 
 	request = new XMLHttpRequest();
-	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
+	request.open("get", "https://fathomless-thicket-84018.herokuapp.com/redline.json", true);
 	request.onreadystatechange = getSchedule;
 	request.send();
 
