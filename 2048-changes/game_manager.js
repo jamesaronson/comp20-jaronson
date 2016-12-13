@@ -94,9 +94,8 @@ GameManager.prototype.actuate = function () {
       score: this.score, 
       grid: JSON.stringify(this.grid.serialize())
     };
-    var scores = JSON.stringify(info);
 
-    console.log(info);
+    console.log(JSON.stringify(info));
 
     var request = new XMLHttpRequest;
     request.open("post", "https://fathomless-thicket-84018.herokuapp.com/submit.json", true);
@@ -107,7 +106,7 @@ GameManager.prototype.actuate = function () {
         alert(message);
       }
     };
-    request.send(info);
+    request.send(`username=${info.username}&score=${info.score}&grid=${info.grid}`);
   }
   initial_turn = false;
   // Clear the state when the game is over (game over only, not win)
